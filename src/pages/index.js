@@ -1,6 +1,6 @@
 import React from 'react';
 import Helmet from 'react-helmet';
-// import L from 'leaflet';
+import L from 'leaflet';
 import axios from 'axios';
 
 import Layout from 'components/Layout';
@@ -30,11 +30,38 @@ const IndexPage = () => {
 
     try {
       response = await axios.get('https://corona.lmao.ninja/v2/countries');
-    } catch(e) {
+    } catch (e) {
       console.log(`E`, e);
       return;
     }
-    console.log('response', response)
+
+    const { data = [] } = response;
+    const hasData = Array.isArray(data) && data.length > 0;
+
+    if (!hasData) return;
+
+    const geoJson = {
+      type: 'FeatureCollection',
+      features: data.map((country = {}) => {
+        const { countryInfo = {} } = country;
+        const { lat, long: lng } = countryInfo;
+        return {
+          type: 'Feature',
+          properties: {
+            ...country,
+          },
+          geometry: {
+            type: 'Point',
+            coordinates: [lng, lat]
+          }
+        }
+      })
+    }
+
+    const geoJsonLayers = new L.GeoJSON(geoJson);
+
+    geoJsonLayers.addTo(map);
+
   }
 
   const mapSettings = {
