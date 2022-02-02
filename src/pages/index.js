@@ -1,12 +1,14 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import L from 'leaflet';
-import axios from 'axios';
 
 import Layout from 'components/Layout';
 import Container from 'components/Container';
 import Map from 'components/Map';
 
+import { commafy, friendlyDate } from '../lib/util';
+
+import { useTracker } from '../hooks';
 
 const LOCATION = {
   lat: 0,
@@ -17,6 +19,49 @@ const DEFAULT_ZOOM = 2;
 
 const IndexPage = () => {
 
+  const { data: countries = [] } = useTracker({
+    api: 'countries'
+  });
+
+  const { data: stats = [] } = useTracker({
+    api: 'all'
+  });
+
+  const hasCountries = Array.isArray(countries) && countries.length > 0;
+
+  const dashboardStats = [
+    {
+      primary: {
+        label: 'Total Cases',
+        value: stats ? commafy(stats?.cases) : '-'
+      },
+      secondary: {
+        label: 'Per 1 Million',
+        value: stats ? commafy(stats?.casesPerOneMillion) : '-'
+      }
+    },
+    {
+      primary: {
+        label: 'Total Deaths',
+        value: stats ? commafy(stats?.deaths) : '-'
+      },
+      secondary: {
+        label: 'Per 1 Million',
+        value: stats ? commafy(stats?.deathsPerOneMillion) : '-'
+      }
+    },
+    {
+      primary: {
+        label: 'Total Tests',
+        value: stats ? commafy(stats?.tests) : '-'
+      },
+      secondary: {
+        label: 'Per 1 Million',
+        value: stats ? commafy(stats?.testsPerOneMillion) : '-'
+      }
+    }
+  ]
+
   /**
    * mapEffect
    * @description Fires a callback once the page renders
@@ -24,25 +69,11 @@ const IndexPage = () => {
    */
 
   async function mapEffect({ leafletElement: map } = {}) {
-    if (!map) return;
-
-    let response;
-
-    try {
-      response = await axios.get('https://corona.lmao.ninja/v2/countries');
-    } catch (e) {
-      console.log(`E`, e);
-      return;
-    }
-
-    const { data = [] } = response;
-    const hasData = Array.isArray(data) && data.length > 0;
-
-    if (!hasData) return;
+    if (!hasCountries) return;
 
     const geoJson = {
       type: 'FeatureCollection',
-      features: data.map((country = {}) => {
+      features: countries.map((country = {}) => {
         const { countryInfo = {} } = country;
         const { lat, long: lng } = countryInfo;
         return {
@@ -127,15 +158,44 @@ const IndexPage = () => {
         <title>Home Page</title>
       </Helmet>
 
-      <Map {...mapSettings} />
+      <div className='tracker'>
+        <Map {...mapSettings} />
+        <div className="tracker-stats">
+          <ul>
+            {dashboardStats.map(({ primary = {}, secondary = {} }, i) => {
+              return (
+                <li key={`Stat-${i}`} className="tracker-stat">
+                  {primary.value && (
+                    <p className="tracker-stat-primary">
+                      {primary.value}
+                      <strong>{primary.label}</strong>
+                    </p>
+                  )}
+                  {secondary.value && (
+                    <p className="tracker-stat-secondary">
+                      {secondary.value}
+                      <strong>{secondary.label}</strong>
+                    </p>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <div className="tracker-last-updated">
+          <p>
+            Last Updated: {stats ? friendlyDate(stats?.updated) : '-'}
+          </p>
+        </div>
+      </div>
 
       <Container type="content" className="text-center home-start">
-        {/* <h2>Still Getting Started?</h2>
+        <h2>Still Getting Started?</h2>
         <p>Run the following in your terminal!</p>
         <pre>
           <code>gatsby new [directory] https://github.com/colbyfayock/gatsby-starter-leaflet</code>
         </pre>
-        <p className="note">Note: Gatsby CLI required globally for the above command</p> */}
+        <p className="note">Note: Gatsby CLI required globally for the above command</p>
       </Container>
     </Layout>
   );
