@@ -182,7 +182,7 @@ const IndexPage = () => {
       </Helmet>
 
       <div className='tracker'>
-        <Map {...mapSettings} />
+        <Map {...mapSettings} style={{ height: 500 }} />
         <div className="tracker-stats">
           <ul>
             {dashboardStats.map(({ primary = {}, secondary = {} }, i) => {
