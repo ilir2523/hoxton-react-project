@@ -21,6 +21,7 @@ const defaultState = {
 }
 
 const useTracker = ({ api = 'all' }) => {
+
     const [tracker = {}, setTracker] = useState(defaultState)
 
     async function fetchTracker() {
@@ -50,6 +51,7 @@ const useTracker = ({ api = 'all' }) => {
             });
             return
         }
+
         const { data } = response;
 
         setTracker((prev) => {
@@ -61,6 +63,7 @@ const useTracker = ({ api = 'all' }) => {
         });
 
     }
+
     useEffect(() => {
         fetchTracker()
     }, [api])
@@ -71,4 +74,4 @@ const useTracker = ({ api = 'all' }) => {
     }
 };
 
-export default useTracker
+export default useTracker;

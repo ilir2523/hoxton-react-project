@@ -8,7 +8,7 @@ import Map from 'components/Map';
 
 import { commafy, friendlyDate } from '../lib/util';
 
-import { useTracker } from '../hooks';
+import { useTracker } from 'hooks';
 
 const LOCATION = {
   lat: 0,
@@ -27,40 +27,58 @@ const IndexPage = () => {
     api: 'all'
   });
 
-  const hasCountries = Array.isArray(countries) && countries.length > 0;
+  const hasCountries = Array.isArray( countries ) && countries.length > 0;
 
   const dashboardStats = [
     {
       primary: {
         label: 'Total Cases',
-        value: stats ? commafy(stats?.cases) : '-'
+        value: stats ? commafy(stats?.cases) : '-',
       },
       secondary: {
         label: 'Per 1 Million',
-        value: stats ? commafy(stats?.casesPerOneMillion) : '-'
-      }
+        value: stats ? commafy(stats?.casesPerOneMillion) : '-',
+      },
     },
     {
       primary: {
         label: 'Total Deaths',
-        value: stats ? commafy(stats?.deaths) : '-'
+        value: stats ? commafy(stats?.deaths) : '-',
       },
       secondary: {
         label: 'Per 1 Million',
-        value: stats ? commafy(stats?.deathsPerOneMillion) : '-'
-      }
+        value: stats ? commafy(stats?.deathsPerOneMillion) : '-',
+      },
     },
     {
       primary: {
         label: 'Total Tests',
-        value: stats ? commafy(stats?.tests) : '-'
+        value: stats ? commafy(stats?.tests) : '-',
       },
       secondary: {
         label: 'Per 1 Million',
-        value: stats ? commafy(stats?.testsPerOneMillion) : '-'
-      }
-    }
-  ]
+        value: stats ? commafy(stats?.testsPerOneMillion) : '-',
+      },
+    },
+    {
+      primary: {
+        label: 'Active Cases',
+        value: stats ? commafy( stats?.active ) : '-',
+      },
+    },
+    {
+      primary: {
+        label: 'Critical Cases',
+        value: stats ? commafy( stats?.critical ) : '-',
+      },
+    },
+    {
+      primary: {
+        label: 'Recovered Cases',
+        value: stats ? commafy( stats?.recovered ) : '-',
+      },
+    },
+  ];
 
   /**
    * mapEffect
@@ -69,7 +87,12 @@ const IndexPage = () => {
    */
 
   async function mapEffect({ leafletElement: map } = {}) {
-    if (!hasCountries) return;
+    if (!hasCountries || !map) return;
+
+    map.eachLayer(( layer ) => {
+      if ( layer?.options?.name === 'OpenStreetMap' ) return;
+      map.removeLayer( layer );
+    });
 
     const geoJson = {
       type: 'FeatureCollection',
@@ -84,10 +107,10 @@ const IndexPage = () => {
           geometry: {
             type: 'Point',
             coordinates: [lng, lat]
-          }
-        }
-      })
-    }
+          },
+        };
+      }),
+    };
 
     function countryPointToLayer(feature = {}, latlng) {
       const { properties = {} } = feature;
