@@ -140,9 +140,9 @@ const IndexPage = () => {
         <span class="icon-marker-tooltip">
           <h2>${country}</h2>
           <ul>
-            <li><strong>Confirmed:</strong> ${cases}</li>
-            <li><strong>Deaths:</strong> ${deaths}</li>
-            <li><strong>Recovered:</strong> ${recovered}</li>
+            <li><strong>Confirmed:</strong> ${commafy(cases)}</li>
+            <li><strong>Deaths:</strong> ${commafy(deaths)}</li>
+            <li><strong>Recovered:</strong> ${commafy(recovered)}</li>
             <li><strong>Last Update:</strong> ${updatedFormatted}</li>
           </ul>
         </span>
