@@ -23,7 +23,45 @@ const SecondPage = () => {
         label: 'Per 1 Million',
         value: stats ? commafy(stats?.casesPerOneMillion) : '-',
       },
-    }
+    },
+    {
+      primary: {
+        label: 'Total Deaths',
+        value: stats ? commafy(stats?.deaths) : '-',
+      },
+      secondary: {
+        label: 'Per 1 Million',
+        value: stats ? commafy(stats?.deathsPerOneMillion) : '-',
+      },
+    },
+    {
+      primary: {
+        label: 'Total Tests',
+        value: stats ? commafy(stats?.tests) : '-',
+      },
+      secondary: {
+        label: 'Per 1 Million',
+        value: stats ? (stats?.testsPerOneMillion) : '-',
+      },
+    },
+    {
+      primary: {
+        label: 'Active Cases',
+        value: stats ? commafy( stats?.active ) : '-',
+      },
+    },
+    {
+      primary: {
+        label: 'Critical Cases',
+        value: stats ? commafy( stats?.critical ) : '-',
+      },
+    },
+    {
+      primary: {
+        label: 'Recovered Cases',
+        value: stats ? commafy( stats?.recovered ) : '-',
+      },
+    },
   ]
 
   return (
@@ -40,13 +78,13 @@ const SecondPage = () => {
                 <li key={`Stat-${i}`} className="tracker-stat">
                   {primary.value && (
                     <p className="tracker-stat-primary">
-                      <strong>{primary.label}:</strong>
+                      <strong>{primary.label}: </strong>
                       {primary.value}
                     </p>
                   )}
                   {secondary.value && (
                     <p className="tracker-stat-secondary">
-                      <strong>{secondary.label}:</strong>
+                      <strong>{secondary.label}: </strong>
                       {secondary.value}
                     </p>
                   )}

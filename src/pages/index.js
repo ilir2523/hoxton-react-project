@@ -57,7 +57,7 @@ const IndexPage = () => {
       },
       secondary: {
         label: 'Per 1 Million',
-        value: stats ? commafy(stats?.testsPerOneMillion) : '-',
+        value: stats ? (stats?.testsPerOneMillion) : '-',
       },
     },
     {
