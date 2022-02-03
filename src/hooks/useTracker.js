@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React ,{ useEffect, useState } from "react";
 import axios from 'axios';
 
 const API_HOST = 'https://corona.lmao.ninja/v2';
@@ -24,7 +24,7 @@ const useTracker = ({ api = 'all' }) => {
 
     const [tracker = {}, setTracker] = useState(defaultState)
 
-    async function fetchTracker() {
+    const fetchTracker = React.useCallback(async () => {
         let route = ENDPOINTS.find(({ id } = {}) => id === api);
 
         if (!route) {
@@ -62,11 +62,11 @@ const useTracker = ({ api = 'all' }) => {
             }
         });
 
-    }
+    },[api]);
 
     useEffect(() => {
         fetchTracker()
-    }, [api])
+    }, [api, fetchTracker])
 
     return {
         fetchTracker,
