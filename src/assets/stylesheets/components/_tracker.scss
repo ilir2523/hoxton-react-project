@@ -1,8 +1,8 @@
 .tracker-stats {
-
   color: white;
-  background-color: $blue-grey-900;
-  border-top: solid 1px darken($blue-grey-900, 5);
+  background-color: #081217;
+  border-right: 1px solid #263238;
+  border-top: 4px solid #263238;
 
   ul {
     display: grid;
@@ -19,8 +19,8 @@
   font-size: 2em;
   text-align: center;
   padding: .5em;
-  border-right: solid 1px darken($blue-grey-900, 5);
-  border-bottom: solid 1px darken($blue-grey-900, 5);
+  border-right: 1px solid #263238;
+  border-bottom: 1px solid #263238;
 
   strong {
     font-weight: normal;
@@ -55,7 +55,7 @@
 .tracker-last-updated {
 
   color: white;
-  background-color: $blue-grey-900;
+  background-color: #081217;
   padding: .8em 0;
 
   p {

@@ -182,7 +182,7 @@ const IndexPage = () => {
       </Helmet>
 
       <div className='tracker'>
-        <Map {...mapSettings} style={{ height: 500 }} />
+        <Map {...mapSettings} style={{ height: 380 }} />
         <div className="tracker-stats">
           <ul>
             {dashboardStats.map(({ primary = {}, secondary = {} }, i) => {
@@ -213,12 +213,7 @@ const IndexPage = () => {
       </div>
 
       <Container type="content" className="text-center home-start">
-        <h2>Still Getting Started?</h2>
-        <p>Run the following in your terminal!</p>
-        <pre>
-          <code>gatsby new [directory] https://github.com/colbyfayock/gatsby-starter-leaflet</code>
-        </pre>
-        <p className="note">Note: Gatsby CLI required globally for the above command</p>
+        <h2>Mapping App with Gatsby and React Leaflet</h2>
       </Container>
     </Layout>
   );
